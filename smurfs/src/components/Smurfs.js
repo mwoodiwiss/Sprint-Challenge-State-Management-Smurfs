@@ -8,6 +8,7 @@ const Smurfs = () => {
 
   return (
     <div className="smurfs-container">
+      <h1>Your Smurf Village</h1>
       {smurfs.map(smurf => (
         <Smurf key={smurf.id} smurf={smurf} />
       ))}

@@ -29,13 +29,12 @@ const SmurfFormik = withFormik({
             height: height || ""
         };
     },
-    handleSubmit(values, { resetForm }, props) { 
+    handleSubmit(values, { resetForm }) { 
         axios
             .post('http://localhost:3333/smurfs', values)
             .then(res => {
                 console.log(res);
                 resetForm();
-                props.setSmurfs(res.data)
             })
             .catch(err => {
                 console.log(err);
