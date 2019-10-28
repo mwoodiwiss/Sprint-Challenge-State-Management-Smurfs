@@ -1,16 +1,46 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
+import { Route } from "react-router-dom";
+import axios from "axios";
+import { SmurfContext } from './Contexts/SmurfContext';
+import Smurfs from "./Smurfs";
+import SmurfFormik from "./Form/Form";
+import Navigation from './Navigation';
 import "./App.css";
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <h1>SMURFS! 2.0 W/ Redux</h1>
-        <div>Welcome to your state management version of Smurfs!</div>
-        <div>Start inside of your `src/index.js` file!</div>
-        <div>Have fun!</div>
-      </div>
-    );
-  }
-}
 
-export default App;
+
+export default function App() {
+  const [smurfs, setSmurfs] = useState([]);
+
+  useEffect(() => {
+
+    axios
+      .get(`http://localhost:3333/smurfs`)
+      .then(response => {
+        console.log(response.data);
+        setSmurfs(response.data);        
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <div className="App">
+      <SmurfContext.Provider value={ smurfs }>
+          <Navigation component={Navigation} />
+
+          {/* Routes */}
+          <Route
+            exact
+            path="/"
+            render={() => <Smurfs component={Smurfs} />}
+          />
+
+          <Route
+            path="/form"
+            render={() => <SmurfFormik component={SmurfFormik} />}
+          />
+      </SmurfContext.Provider>
+    </div>
+  );
+}
